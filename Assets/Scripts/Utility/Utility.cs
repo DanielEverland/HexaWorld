@@ -1,9 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Utility {
-
+    
 	public static bool HexalExists(int x, int y, int z)
 	{
 		Chunk chunk = MapData.GetChunk (
@@ -15,17 +15,8 @@ public static class Utility {
 			return false;
 
 		return chunk.ContainsHexal (
-			(int)(x - chunk.Offset.x * Chunk.CHUNK_SIZE),
-			(int)(y - chunk.Offset.y * Chunk.CHUNK_SIZE),
-			(int)(z - chunk.Offset.z * Chunk.CHUNK_SIZE));
-	}
-	private static int ConvertWorldPosToChunkPos(int value)
-	{
-		int chunkPos = value / Chunk.CHUNK_SIZE;
-
-		if(chunkPos % 1 == 0)
-			chunkPos = Mathf.FloorToInt(chunkPos);
-
-		return chunkPos;
+			(int)(x - chunk.ChunkPosition.x * Chunk.CHUNK_SIZE),
+			(int)(y - chunk.ChunkPosition.y * Chunk.CHUNK_SIZE),
+			(int)(z - chunk.ChunkPosition.z * Chunk.CHUNK_SIZE));
 	}
 }

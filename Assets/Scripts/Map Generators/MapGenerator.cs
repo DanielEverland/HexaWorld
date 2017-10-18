@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,30 +7,20 @@ public class MapGenerator : MonoBehaviour {
 	[SerializeField]
 	private GameObject ChunkPrefab;
 
-	private HexalBuffer _buffer = new HexalBuffer();
+	private static HexalBuffer _buffer = new HexalBuffer();
+    private static GameObject _chunkPrefab;
 
 	private const float HEXAL_HEIGHT = 0.5f;
 
-	private void Start()
+    private void Awake()
+    {
+        _chunkPrefab = ChunkPrefab;
+    }
+    private void Update()
 	{
-		PerformChunkGeneration ();
+		MapData.Poll ();
 	}
-	private void PerformChunkGeneration()
-	{
-		MapData.Poll();
-
-		for (int x = 0; x < MapData.Chunks.GetLength(0); x++)
-		{
-			for (int y = 0; y < MapData.Chunks.GetLength(1); y++)
-			{
-				for (int z = 0; z < MapData.Chunks.GetLength(2); z++)
-				{
-					RenderChunk (MapData.Chunks [x, y, z]);
-				}
-			}
-		}
-	}
-	private void RenderChunk(Chunk chunk)
+	public static void RenderChunk(Chunk chunk)
 	{
 		CreateChunkGameObject (chunk);
 
@@ -51,12 +41,13 @@ public class MapGenerator : MonoBehaviour {
 
 		ApplyMeshData ();
 	}
-	private void CreateChunkGameObject(Chunk chunk)
+	private static void CreateChunkGameObject(Chunk chunk)
 	{
-		GameObject gameObject = Instantiate (ChunkPrefab);
+		GameObject gameObject = Instantiate (_chunkPrefab);
+		chunk.ChunkObject = gameObject;
 
-		gameObject.name = string.Format ("Chunk: {0}", chunk.Offset);
-		gameObject.transform.position = GetChunkWorldPosition(chunk.Offset) * Chunk.CHUNK_SIZE;
+		gameObject.name = string.Format ("Chunk: {0}", chunk.ChunkPosition);
+		gameObject.transform.position = GetChunkWorldPosition(chunk.ChunkPosition) * Chunk.CHUNK_SIZE;
 
 		_buffer.Mesh = new Mesh();
 		_buffer.MeshRenderer = gameObject.GetComponent<MeshRenderer> ();
@@ -67,14 +58,14 @@ public class MapGenerator : MonoBehaviour {
 		_buffer.Triangles = new List<int> ();
 		_buffer.VerticeCount = 0;
 	}
-	private Vector3 GetChunkWorldPosition(Vector3 chunkDataPosition)
+	private static Vector3 GetChunkWorldPosition(Vector3 chunkDataPosition)
 	{
 		chunkDataPosition.z *= 0.75f;
 		chunkDataPosition.y *= HEXAL_HEIGHT;
 
 		return chunkDataPosition;
 	}
-	private Vector3 GetHexalWorldPosition(Vector3 hexalDataPosition)
+	private static Vector3 GetHexalWorldPosition(Vector3 hexalDataPosition)
 	{
 		if (hexalDataPosition.z % 2 == 0)
 		{
@@ -86,7 +77,7 @@ public class MapGenerator : MonoBehaviour {
 
 		return hexalDataPosition;
 	}
-	private void RenderHexal()
+	private static void RenderHexal()
 	{
 		Vector3 worldPosition = GetHexalWorldPosition (_buffer.HexalPosition);
 
@@ -111,9 +102,9 @@ public class MapGenerator : MonoBehaviour {
 		});
 
 		AddTriangles (
-			(int)(_buffer.Chunk.Offset.x * Chunk.CHUNK_SIZE + _buffer.HexalPosition.x),
-			(int)(_buffer.Chunk.Offset.y * Chunk.CHUNK_SIZE + _buffer.HexalPosition.y),
-			(int)(_buffer.Chunk.Offset.z * Chunk.CHUNK_SIZE + _buffer.HexalPosition.z));
+			(int)(_buffer.Chunk.ChunkPosition.x * Chunk.CHUNK_SIZE + _buffer.HexalPosition.x),
+			(int)(_buffer.Chunk.ChunkPosition.y * Chunk.CHUNK_SIZE + _buffer.HexalPosition.y),
+			(int)(_buffer.Chunk.ChunkPosition.z * Chunk.CHUNK_SIZE + _buffer.HexalPosition.z));
 
 		_buffer.VerticeCount += 12;
 	}
@@ -123,7 +114,7 @@ public class MapGenerator : MonoBehaviour {
 	/// <param name="x">The global x coordinate.</param>
 	/// <param name="y">The global y coordinate.</param>
 	/// <param name="z">The global z coordinate.</param>
-	private void AddTriangles(int x, int y, int z)
+	private static void AddTriangles(int x, int y, int z)
 	{
 		int vertexCount = _buffer.VerticeCount;
 
@@ -199,7 +190,7 @@ public class MapGenerator : MonoBehaviour {
 			});
 		}
 	}
-	private void ApplyMeshData()
+	private static void ApplyMeshData()
 	{
 		_buffer.Mesh.vertices = _buffer.Vertices.ToArray();
 		_buffer.Mesh.triangles = _buffer.Triangles.ToArray();

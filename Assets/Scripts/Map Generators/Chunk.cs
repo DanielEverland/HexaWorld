@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,13 +20,43 @@ public class Chunk {
 
 	public const byte CHUNK_SIZE = 8;
 
-	public Vector3 Offset { get { return _offset; } }
+	public GameObject ChunkObject { get; set; }
+	public Vector3 ChunkPosition { get { return _offset; } }
 	public byte[,,] Hexals { get { return _hexals; } }
+
+    public int NeighborCount { get { return NeighboringChunks.Count; } }
+
+    private Dictionary<Vector3, Chunk> NeighboringChunks = new Dictionary<Vector3, Chunk>();
 
 	private byte[,,] _hexals;
 
 	private readonly Vector3 _offset;
 
+    public List<Vector3> GetMissingNeighbors()
+    {
+        List<Vector3> list = new List<Vector3>();
+
+        for (int x = -1; x < 1; x++)
+        {
+            for (int y = -1; y < 1; y++)
+            {
+                for (int z = -1; z < 1; z++)
+                {
+                    if (Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2) + Mathf.Pow(z, 2)) != 1)
+                        continue;
+
+                    Vector3 neighborPosition = new Vector3(x, y, z) + ChunkPosition;
+
+                    if(!MapData.Chunks.ContainsKey(neighborPosition))
+                    {
+                        list.Add(neighborPosition);
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
 	public bool ContainsHexal(Vector3 localPosition)
 	{
 		return ContainsHexal ((int)localPosition.x, (int)localPosition.y, (int)localPosition.z);
@@ -57,6 +87,6 @@ public class Chunk {
 
 	public override string ToString ()
 	{
-		return string.Format ("[Chunk: Offset={0}]", Offset);
+		return string.Format ("[Chunk: Offset={0}]", ChunkPosition);
 	}
 }

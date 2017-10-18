@@ -5,6 +5,11 @@ using System;
 
 public class Game : MonoBehaviour {
 
+	[SerializeField]
+	private GameObject _player;
+
+	public static GameObject Player { get; private set; }
+
 	public static Game Instance
     {
         get
@@ -31,6 +36,8 @@ public class Game : MonoBehaviour {
     }
     private void Initialize()
     {
+		Player = _player;
+
         foreach (Action action in Initializers)
         {
             action.Invoke();

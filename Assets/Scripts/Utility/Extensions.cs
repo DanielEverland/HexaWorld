@@ -7,7 +7,13 @@ public static class Extensions {
 
 	private const byte MAX_ITEM_OUTPUT = 255;
 
-
+	public static Vector3 ToChunkPosition(this Vector3 vector)
+	{
+		return new Vector3 (
+			Mathf.FloorToInt (vector.x / Chunk.CHUNK_SIZE),
+			Mathf.FloorToInt (vector.y / Chunk.CHUNK_SIZE),
+			Mathf.FloorToInt (vector.z / Chunk.CHUNK_SIZE));
+	}
 	public static void Output(this object[] list)
 	{
 		if(list.Length > MAX_ITEM_OUTPUT)
