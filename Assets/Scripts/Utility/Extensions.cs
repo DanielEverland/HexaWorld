@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +10,9 @@ public static class Extensions {
 	public static Vector3 ToChunkPosition(this Vector3 vector)
 	{
 		return new Vector3 (
-			Mathf.FloorToInt (vector.x / Chunk.CHUNK_SIZE),
-			Mathf.FloorToInt (vector.y / Chunk.CHUNK_SIZE),
-			Mathf.FloorToInt (vector.z / Chunk.CHUNK_SIZE));
+			Mathf.FloorToInt (vector.x / Chunk.CHUNK_SIZE * (1 / Chunk.HexalSize.x)),
+			Mathf.FloorToInt (vector.y / Chunk.CHUNK_SIZE * (1 / Chunk.HexalSize.y)),
+			Mathf.FloorToInt (vector.z / Chunk.CHUNK_SIZE * (1 / Chunk.HexalSize.z)));
 	}
 	public static void Output(this object[] list)
 	{

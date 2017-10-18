@@ -19,6 +19,9 @@ public class Chunk {
 	}
 
 	public const byte CHUNK_SIZE = 8;
+    public static Vector3 HexalSize { get { return _hexalSize; } }
+    
+    private static readonly Vector3 _hexalSize = new Vector3(1, 0.5f, 0.75f);
 
 	public GameObject ChunkObject { get; set; }
 	public Vector3 ChunkPosition { get { return _offset; } }
@@ -32,6 +35,45 @@ public class Chunk {
 
 	private readonly Vector3 _offset;
 
+    private void NotifyNeighborsOfCreation()
+    {
+        for (int x = -1; x < 1; x++)
+        {
+            for (int y = -1; y < 1; y++)
+            {
+                for (int z = -1; z < 1; z++)
+                {
+                    if (Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2) + Mathf.Pow(z, 2)) != 1)
+                        continue;
+                    
+                    PollNeighbor(new Vector3(x, y, z) + ChunkPosition);   
+                }
+            }
+        }
+    }
+    private void PollNeighbor(Vector3 neighborPosition)
+    {
+        if (MapData.Chunks.ContainsKey(neighborPosition))
+        {
+            AddNeighbor(MapData.Chunks[neighborPosition], true);
+        }
+    }
+    private void AddNeighbor(Chunk chunk, bool notifyNeighbor = false)
+    {
+        if(NeighboringChunks.ContainsKey(chunk.ChunkPosition))
+        {
+            NeighboringChunks[chunk.ChunkPosition] = chunk;
+        }
+        else
+        {
+            NeighboringChunks.Add(chunk.ChunkPosition, chunk);
+        }
+
+        if(notifyNeighbor)
+        {
+            chunk.AddNeighbor(this, false);
+        }
+    }
     public List<Vector3> GetMissingNeighbors()
     {
         List<Vector3> list = new List<Vector3>();

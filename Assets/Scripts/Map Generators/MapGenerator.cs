@@ -9,9 +9,7 @@ public class MapGenerator : MonoBehaviour {
 
 	private static HexalBuffer _buffer = new HexalBuffer();
     private static GameObject _chunkPrefab;
-
-	private const float HEXAL_HEIGHT = 0.5f;
-
+    
     private void Awake()
     {
         _chunkPrefab = ChunkPrefab;
@@ -60,8 +58,8 @@ public class MapGenerator : MonoBehaviour {
 	}
 	private static Vector3 GetChunkWorldPosition(Vector3 chunkDataPosition)
 	{
-		chunkDataPosition.z *= 0.75f;
-		chunkDataPosition.y *= HEXAL_HEIGHT;
+		chunkDataPosition.z *= Chunk.HexalSize.z;
+		chunkDataPosition.y *= Chunk.HexalSize.y;
 
 		return chunkDataPosition;
 	}
@@ -69,11 +67,11 @@ public class MapGenerator : MonoBehaviour {
 	{
 		if (hexalDataPosition.z % 2 == 0)
 		{
-			hexalDataPosition.x -= 0.5f;
+			hexalDataPosition.x -= Chunk.HexalSize.y;
 		}
 
-		hexalDataPosition.y *= HEXAL_HEIGHT;
-		hexalDataPosition.z *= 0.75f;
+		hexalDataPosition.y *= Chunk.HexalSize.y;
+		hexalDataPosition.z *= Chunk.HexalSize.z;
 
 		return hexalDataPosition;
 	}
@@ -83,22 +81,22 @@ public class MapGenerator : MonoBehaviour {
 
 		_buffer.Vertices.AddRange(new List<Vector3>(12)
 		{
-			new Vector3(-0.5f	, HEXAL_HEIGHT / 2	, 0.25f)	+ worldPosition,
-			new Vector3(0.0f	, HEXAL_HEIGHT / 2	, 0.5f)		+ worldPosition,
-			new Vector3(0.5f 	, HEXAL_HEIGHT / 2	, 0.25f)	+ worldPosition,
+			new Vector3(-Chunk.HexalSize.x / 2  , Chunk.HexalSize.y / 2  	, 0.25f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2	, Chunk.HexalSize.y / 2     , 0.25f)	+ worldPosition,
                                   
-			new Vector3(-0.5f	, HEXAL_HEIGHT / 2	, -0.25f)	+ worldPosition,
-			new Vector3(0.0f	, HEXAL_HEIGHT / 2	, -0.5f)	+ worldPosition,
-			new Vector3(0.5f	, HEXAL_HEIGHT / 2	, -0.25f)	+ worldPosition,
+			new Vector3(-Chunk.HexalSize.x / 2  , Chunk.HexalSize.y / 2  	, -0.25f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2     , -0.25f)	+ worldPosition,
 
 
-			new Vector3(-0.5f	, -HEXAL_HEIGHT / 2	, 0.25f)	+ worldPosition,
-			new Vector3(0.0f	, -HEXAL_HEIGHT / 2	, 0.5f)		+ worldPosition,
-			new Vector3(0.5f 	, -HEXAL_HEIGHT / 2	, 0.25f)	+ worldPosition,
+			new Vector3(-Chunk.HexalSize.x / 2  , -Chunk.HexalSize.y / 2  	, 0.25f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2    , 0.25f)	+ worldPosition,
 
-			new Vector3(-0.5f	, -HEXAL_HEIGHT / 2	, -0.25f)	+ worldPosition,
-			new Vector3(0.0f	, -HEXAL_HEIGHT / 2	, -0.5f)	+ worldPosition,
-			new Vector3(0.5f	, -HEXAL_HEIGHT / 2	, -0.25f)	+ worldPosition,
+			new Vector3(-Chunk.HexalSize.x / 2  , -Chunk.HexalSize.y / 2  	, -0.25f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
+			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2    , -0.25f)	+ worldPosition,
 		});
 
 		AddTriangles (
