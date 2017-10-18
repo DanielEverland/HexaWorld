@@ -16,7 +16,7 @@ public static class MapData {
 		}
 	}
 
-	private const byte CHUNK_RADIUS = 1;
+	private const byte CHUNK_RADIUS = 3;
 
 	private static Dictionary<Vector3, Chunk> _chunks = new Dictionary<Vector3, Chunk>();
     private static Vector3 _currentChunkPosition;

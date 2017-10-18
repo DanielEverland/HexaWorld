@@ -37,11 +37,11 @@ public class Chunk {
 
     private void NotifyNeighborsOfCreation()
     {
-        for (int x = -1; x < 1; x++)
+        for (int x = -1; x <= 1; x++)
         {
-            for (int y = -1; y < 1; y++)
+            for (int y = -1; y <= 1; y++)
             {
-                for (int z = -1; z < 1; z++)
+                for (int z = -1; z <= 1; z++)
                 {
                     if (Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2) + Mathf.Pow(z, 2)) != 1)
                         continue;
@@ -78,11 +78,11 @@ public class Chunk {
     {
         List<Vector3> list = new List<Vector3>();
 
-        for (int x = -1; x < 1; x++)
+        for (int x = -1; x <= 1; x++)
         {
-            for (int y = -1; y < 1; y++)
+            for (int y = -1; y <= 1; y++)
             {
-                for (int z = -1; z < 1; z++)
+                for (int z = -1; z <= 1; z++)
                 {
                     if (Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2) + Mathf.Pow(z, 2)) != 1)
                         continue;
