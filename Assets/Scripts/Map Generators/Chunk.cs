@@ -6,7 +6,7 @@ public class Chunk {
 
 	public Chunk(Vector3 position)
 	{
-		_offset = position;
+		_chunkPosition = position;
 		_hexals = new byte[CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE];
 
 		for (int x = 0; x < Hexals.GetLength(0); x++) {
@@ -16,6 +16,8 @@ public class Chunk {
 				}
 			}
 		}
+
+        NotifyNeighborsOfCreation();
 	}
 
 	public const byte CHUNK_SIZE = 8;
@@ -24,17 +26,57 @@ public class Chunk {
     private static readonly Vector3 _hexalSize = new Vector3(1, 0.5f, 0.75f);
 
 	public GameObject ChunkObject { get; set; }
-	public Vector3 ChunkPosition { get { return _offset; } }
+	public Vector3 ChunkPosition { get { return _chunkPosition; } }
 	public byte[,,] Hexals { get { return _hexals; } }
+
+	private readonly Vector3 _chunkPosition;
 
     public int NeighborCount { get { return NeighboringChunks.Count; } }
 
     private Dictionary<Vector3, Chunk> NeighboringChunks = new Dictionary<Vector3, Chunk>();
 
 	private byte[,,] _hexals;
+    private int _lastDrawFrame;
 
-	private readonly Vector3 _offset;
+    private const bool DEBUG_DRAW_NEIGHBORS = true;
 
+    public void DebugChunk()
+    {
+        if(DEBUG_DRAW_NEIGHBORS)
+            DrawNeighbors();
+    }
+    public void DrawNeighbors()
+    {
+        if(Time.frameCount - _lastDrawFrame != 0)
+        {
+            _lastDrawFrame = Time.frameCount;
+        }
+        else return;
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                for (int z = -1; z <= 1; z++)
+                {
+                    if (Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2) + Mathf.Pow(z, 2)) != 1)
+                        continue;
+
+                    Color color = Color.red;
+
+                    if(NeighboringChunks.ContainsKey(ChunkPosition + new Vector3(x, y, z)))
+                    {
+                        color = Color.green;
+                    }
+
+                    Vector3 start = Utility.GetChunkWorldPosition(_chunkPosition);
+                    Vector3 end = Utility.GetChunkWorldPosition(_chunkPosition + new Vector3(x, y, z) / 2);
+
+                    Debug.DrawLine(start, end, color, 0, false);
+                }
+            }
+        }
+    }
     private void NotifyNeighborsOfCreation()
     {
         for (int x = -1; x <= 1; x++)

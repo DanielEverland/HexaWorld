@@ -45,7 +45,7 @@ public class MapGenerator : MonoBehaviour {
 		chunk.ChunkObject = gameObject;
 
 		gameObject.name = string.Format ("Chunk: {0}", chunk.ChunkPosition);
-		gameObject.transform.position = GetChunkWorldPosition(chunk.ChunkPosition) * Chunk.CHUNK_SIZE;
+		gameObject.transform.position = Utility.GetChunkWorldPosition(chunk.ChunkPosition);
 
 		_buffer.Mesh = new Mesh();
 		_buffer.MeshRenderer = gameObject.GetComponent<MeshRenderer> ();
@@ -56,28 +56,9 @@ public class MapGenerator : MonoBehaviour {
 		_buffer.Triangles = new List<int> ();
 		_buffer.VerticeCount = 0;
 	}
-	private static Vector3 GetChunkWorldPosition(Vector3 chunkDataPosition)
-	{
-		chunkDataPosition.z *= Chunk.HexalSize.z;
-		chunkDataPosition.y *= Chunk.HexalSize.y;
-
-		return chunkDataPosition;
-	}
-	private static Vector3 GetHexalWorldPosition(Vector3 hexalDataPosition)
-	{
-		if (hexalDataPosition.z % 2 == 0)
-		{
-			hexalDataPosition.x -= Chunk.HexalSize.y;
-		}
-
-		hexalDataPosition.y *= Chunk.HexalSize.y;
-		hexalDataPosition.z *= Chunk.HexalSize.z;
-
-		return hexalDataPosition;
-	}
 	private static void RenderHexal()
 	{
-		Vector3 worldPosition = GetHexalWorldPosition (_buffer.HexalPosition);
+		Vector3 worldPosition = Utility.GetHexalWorldPosition(_buffer.HexalPosition);
 
 		_buffer.Vertices.AddRange(new List<Vector3>(12)
 		{

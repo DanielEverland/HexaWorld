@@ -17,6 +17,7 @@ public static class MapData {
 	}
 
 	private const byte CHUNK_RADIUS = 3;
+    private const bool DEBUG_CHUNKS = false;
 
 	private static Dictionary<Vector3, Chunk> _chunks = new Dictionary<Vector3, Chunk>();
     private static Vector3 _currentChunkPosition;
@@ -26,7 +27,17 @@ public static class MapData {
         _currentChunkPosition = CurrentPosition.ToChunkPosition();
 
         CheckChunk(_currentChunkPosition);
+
+        if(DEBUG_CHUNKS)
+            DebugChunks();
 	}
+    private static void DebugChunks()
+    {
+        foreach (Chunk chunk in _chunks.Values)
+        {
+            chunk.DebugChunk();
+        }
+    }
     private static void CheckChunk(Vector3 chunkPosition)
     {
         if (!Chunks.ContainsKey(chunkPosition))
@@ -58,7 +69,7 @@ public static class MapData {
     private static void CheckNeighbors(Vector3 chunkPosition)
     {
         Chunk chunk = Chunks[chunkPosition];
-
+        
         if (chunk.NeighborCount != 6)
         {
             foreach (Vector3 possibleChunk in chunk.GetMissingNeighbors())
