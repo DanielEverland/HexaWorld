@@ -9,36 +9,61 @@ public class MapGenerator : MonoBehaviour {
 
 	private static HexalBuffer _buffer = new HexalBuffer();
     private static GameObject _chunkPrefab;
+    private static Queue<Chunk> _toRender;
+    
+    private const float MAP_GENERATION_INTERVAL = 0.1f;
+
+    private float _currentMapGenerationTime = MAP_GENERATION_INTERVAL;
     
     private void Awake()
     {
         _chunkPrefab = ChunkPrefab;
+        _toRender = new Queue<Chunk>();
     }
     private void Update()
 	{
-		MapData.Poll ();
+    	MapData.Poll ();
+
+        PollRenderChunks();
 	}
+    private void PollRenderChunks()
+    {
+        if (_currentMapGenerationTime >= MAP_GENERATION_INTERVAL && _toRender.Count > 0)
+        {
+            DoChunkRender(_toRender.Dequeue());
+        }
+
+        _currentMapGenerationTime += Time.deltaTime;
+    }
 	public static void RenderChunk(Chunk chunk)
 	{
-		CreateChunkGameObject (chunk);
-
-		for (int x = 0; x < chunk.Hexals.GetLength(0); x++)
-		{
-			for (int y = 0; y < chunk.Hexals.GetLength(1); y++)
-			{
-				for (int z = 0; z < chunk.Hexals.GetLength(2); z++)
-				{
-					_buffer.HexalPosition = new Vector3 (x, y, z);
-					_buffer.HexalType = chunk.Hexals [x, y, z];
-
-					if(_buffer.HexalType != 0)
-						RenderHexal();
-				}
-			}
-		}
-
-		ApplyMeshData ();
+        _toRender.Enqueue(chunk);
 	}
+    private static void DoChunkRender(Chunk chunk)
+    {
+        //If the player is moving at very high velocity, chunks can get destroyed before they're rendered.
+        if (!MapData.Chunks.ContainsKey(chunk.ChunkPosition))
+            return;
+
+        CreateChunkGameObject(chunk);
+
+        for (int x = 0; x < chunk.Hexals.GetLength(0); x++)
+        {
+            for (int y = 0; y < chunk.Hexals.GetLength(1); y++)
+            {
+                for (int z = 0; z < chunk.Hexals.GetLength(2); z++)
+                {
+                    _buffer.HexalPosition = new Vector3(x, y, z);
+                    _buffer.HexalType = chunk.Hexals[x, y, z];
+
+                    if (_buffer.HexalType != 0)
+                        RenderHexal();
+                }
+            }
+        }
+
+        ApplyMeshData();
+    }
 	private static void CreateChunkGameObject(Chunk chunk)
 	{
 		GameObject gameObject = Instantiate (_chunkPrefab);
