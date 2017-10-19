@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,22 +11,19 @@ public class PlayerMotor : MonoBehaviour {
 
 	private bool _usingBoost;
 	private Vector3 _movementDirection;
-	private Vector2 _mouseDirection;
-	private Vector3 _oldMousePosition;
 	private bool _isFlying = true;
+
+    private float yRotation, xRotation;
 
 	private void Update()
 	{
 		PollKeys ();
 		DoMovement ();
 		MoveCamera ();
-
-		_oldMousePosition = Input.mousePosition;
 	}
 	private void PollKeys()
 	{
 		_usingBoost = Input.GetKey (KeyCode.LeftShift);
-		_mouseDirection = Input.mousePosition - _oldMousePosition;
 
 		_movementDirection = Vector3.zero;
 
@@ -45,13 +42,16 @@ public class PlayerMotor : MonoBehaviour {
 	{
 		if (Input.GetKey (KeyCode.Mouse1))
 		{
-			Vector3 euler = transform.eulerAngles;
+            yRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity;
+            xRotation += Input.GetAxis("Mouse X") * _mouseSensitivity;
 
-			euler.y += _mouseDirection.x * (_mouseSensitivity * Time.deltaTime);
-			euler.x = Mathf.Clamp (euler.x - _mouseDirection.y * (_mouseSensitivity * Time.deltaTime), -360, 360);
+            yRotation = Utility.ClampEulerAngle(yRotation, -90, 90);
 
-			transform.eulerAngles = euler;
-		}
+            Quaternion yQuaternion = Quaternion.AngleAxis(yRotation, Vector3.right);
+            Quaternion xQuaternion = Quaternion.AngleAxis(xRotation, Vector3.up);
+
+            transform.rotation = Quaternion.identity * xQuaternion * yQuaternion;
+        }
 	}
 	private void DoMovement()
 	{

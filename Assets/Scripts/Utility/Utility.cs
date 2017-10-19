@@ -3,7 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Utility {
+    
+    public static float ClampEulerAngle(float angle, float min, float max)
+    {
+        angle = angle % 360;
 
+        if ((angle >= -360F) && (angle <= 360F))
+        {
+            if (angle < -360F)
+            {
+                angle += 360F;
+            }
+            if (angle > 360F)
+            {
+                angle -= 360F;
+            }
+        }
+
+        return Mathf.Clamp(angle, min, max);
+    }
     public static Vector3 GetChunkWorldPosition(Vector3 chunkDataPosition)
     {
         return Vector3.Scale(chunkDataPosition, Chunk.HexalSize) * Chunk.CHUNK_SIZE;
