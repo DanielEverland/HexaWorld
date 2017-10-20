@@ -12,6 +12,10 @@ public class Chunk {
 		for (int x = 0; x < Hexals.GetLength(0); x++) {
 			for (int y = 0; y < Hexals.GetLength(1); y++) {
 				for (int z = 0; z < Hexals.GetLength(2); z++) {
+
+                    if (Utility.GetHexalWorldPosition(new Vector3(0, (int)(position.y * CHUNK_SIZE + y), 0)).y >= 0)
+                        continue;
+
 					_hexals [x, y, z] = 1;
 				}
 			}
