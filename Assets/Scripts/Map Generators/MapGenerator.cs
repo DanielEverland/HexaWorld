@@ -88,20 +88,20 @@ public class MapGenerator : MonoBehaviour {
 		_buffer.Vertices.AddRange(new List<Vector3>(12)
 		{
 			new Vector3(-Chunk.HexalSize.x / 2  , Chunk.HexalSize.y / 2  	, 0.25f)	+ worldPosition,
-			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
+			new Vector3(0                       , Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
 			new Vector3(Chunk.HexalSize.x / 2	, Chunk.HexalSize.y / 2     , 0.25f)	+ worldPosition,
                                   
 			new Vector3(-Chunk.HexalSize.x / 2  , Chunk.HexalSize.y / 2  	, -0.25f)	+ worldPosition,
-			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
+			new Vector3(0                       , Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
 			new Vector3(Chunk.HexalSize.x / 2   , Chunk.HexalSize.y / 2     , -0.25f)	+ worldPosition,
 
 
 			new Vector3(-Chunk.HexalSize.x / 2  , -Chunk.HexalSize.y / 2  	, 0.25f)	+ worldPosition,
-			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
+			new Vector3(0                       , -Chunk.HexalSize.y / 2   	, 0.5f)		+ worldPosition,
 			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2    , 0.25f)	+ worldPosition,
 
 			new Vector3(-Chunk.HexalSize.x / 2  , -Chunk.HexalSize.y / 2  	, -0.25f)	+ worldPosition,
-			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
+			new Vector3(0                       , -Chunk.HexalSize.y / 2   	, -0.5f)	+ worldPosition,
 			new Vector3(Chunk.HexalSize.x / 2   , -Chunk.HexalSize.y / 2    , -0.25f)	+ worldPosition,
 		});
 
