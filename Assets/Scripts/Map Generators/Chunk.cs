@@ -89,8 +89,8 @@ public class Chunk {
                         color = Color.green;
                     }
 
-                    Vector3 start = Utility.GetChunkWorldPosition(_chunkPosition);
-                    Vector3 end = Utility.GetChunkWorldPosition(_chunkPosition + new Vector3(x, y, z) / 2);
+                    Vector3 start = Utility.GetChunkWorldPosition(_chunkPosition + Vector3.one / 2);
+                    Vector3 end = Utility.GetChunkWorldPosition(_chunkPosition + Vector3.one / 2 + new Vector3(x, y, z) / 2);
 
                     Debug.DrawLine(start, end, color, 0, DEBUG_DRAW_NEIGHBORS_DEPTH_TEST);
                 }
