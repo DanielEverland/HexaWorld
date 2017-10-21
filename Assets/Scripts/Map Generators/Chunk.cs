@@ -43,7 +43,10 @@ public class Chunk {
     private int _lastDrawFrame;
 
     private const bool DEBUG_DRAW_NEIGHBORS = true;
+    private const bool DEBUG_DRAW_NEIGHBORS_DEPTH_TEST = true;
+
     private const bool DEBUG_DRAW_OUTLINE = true;
+    private const bool DEBUG_DRAW_OUTLINE_DEPTH_TEST = true;
 
     public void DebugChunk()
     {
@@ -58,7 +61,9 @@ public class Chunk {
         Utility.DrawCube(
             Utility.GetChunkWorldPosition(_chunkPosition) + HexalSize * ((float)CHUNK_SIZE / 2),
             HexalSize * CHUNK_SIZE,
-            Color.blue);
+            Color.blue,
+            0,
+            DEBUG_DRAW_OUTLINE_DEPTH_TEST);
     }
     private void DrawNeighbors()
     {
@@ -87,7 +92,7 @@ public class Chunk {
                     Vector3 start = Utility.GetChunkWorldPosition(_chunkPosition);
                     Vector3 end = Utility.GetChunkWorldPosition(_chunkPosition + new Vector3(x, y, z) / 2);
 
-                    Debug.DrawLine(start, end, color, 0, false);
+                    Debug.DrawLine(start, end, color, 0, DEBUG_DRAW_NEIGHBORS_DEPTH_TEST);
                 }
             }
         }
