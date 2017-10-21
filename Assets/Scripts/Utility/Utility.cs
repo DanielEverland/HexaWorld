@@ -66,19 +66,36 @@ public static class Utility {
 
         return Vector3.Scale(hexalDataPosition, Chunk.HexalSize);
     }
+    public static Vector3 WorldToChunkSpace(float x, float y, float z)
+    {
+        return WorldToChunkSpace(new Vector3(x, y, z));
+    }
+    public static Vector3 WorldToChunkSpace(Vector3 worldSpace)
+    {
+        return new Vector3(
+            WorldToChunkSpaceAxis(worldSpace.x),
+            WorldToChunkSpaceAxis(worldSpace.y),
+            WorldToChunkSpaceAxis(worldSpace.z));
+    }
+    public static float WorldToChunkSpaceAxis(float global)
+    {
+        float local = global % Chunk.CHUNK_SIZE;
+
+        if (local < 0)
+            local += Chunk.CHUNK_SIZE;
+
+        return local;
+    }
     public static bool HexalExists(int x, int y, int z)
 	{
 		Chunk chunk = MapData.GetChunk (
 			Mathf.FloorToInt(x / Chunk.CHUNK_SIZE), 
 			Mathf.FloorToInt(y / Chunk.CHUNK_SIZE), 
 			Mathf.FloorToInt(z / Chunk.CHUNK_SIZE));
-
+        
 		if (chunk == null)
 			return false;
-
-		return chunk.ContainsHexal (
-			(int)(x - chunk.ChunkPosition.x * Chunk.CHUNK_SIZE),
-			(int)(y - chunk.ChunkPosition.y * Chunk.CHUNK_SIZE),
-			(int)(z - chunk.ChunkPosition.z * Chunk.CHUNK_SIZE));
+                
+        return chunk.ContainsHexal(WorldToChunkSpace(x, y, z));
 	}
 }
