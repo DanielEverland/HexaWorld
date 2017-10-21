@@ -44,6 +44,7 @@ public class Chunk {
 
     private const bool DEBUG_DRAW_NEIGHBORS = true;
     private const bool DEBUG_DRAW_NEIGHBORS_DEPTH_TEST = true;
+    private const bool DEBUG_DRAW_NEIGHBORS_ONLY_MISSING = true;
 
     private const bool DEBUG_DRAW_OUTLINE = true;
     private const bool DEBUG_DRAW_OUTLINE_DEPTH_TEST = true;
@@ -87,6 +88,9 @@ public class Chunk {
                     if(NeighboringChunks.ContainsKey(ChunkPosition + new Vector3(x, y, z)))
                     {
                         color = Color.green;
+
+                        if (DEBUG_DRAW_NEIGHBORS_ONLY_MISSING)
+                            continue;
                     }
 
                     Vector3 start = Utility.GetChunkWorldPosition(_chunkPosition + Vector3.one / 2);
