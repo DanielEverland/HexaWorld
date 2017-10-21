@@ -3,7 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Utility {
-    
+
+    public static void DrawCube(Vector3 center, Vector3 size)
+    {
+        DrawCube(center, size, Color.white);
+    }
+    public static void DrawCube(Vector3 center, Vector3 size, Color color, float duration = 0, bool depthTest = true)
+    {
+        Vector3 bottomBackRight     =   center - new Vector3(0.5f   * size.x,   -0.5f   * size.y,   -0.5f   * size.z);
+        Vector3 bottomBackLeft      =   center - new Vector3(-0.5f  * size.x,   -0.5f   * size.y,   -0.5f   * size.z);
+        Vector3 bottomForwardRight  =   center - new Vector3(0.5f   * size.x,   -0.5f   * size.y,   0.5f    * size.z);
+        Vector3 bottomForwardLeft   =   center - new Vector3(-0.5f  * size.x,   -0.5f   * size.y,   0.5f    * size.z);
+
+        Vector3 topBackRight        =   center - new Vector3(0.5f   * size.x,   0.5f    * size.y,   -0.5f   * size.z);
+        Vector3 topBackLeft         =   center - new Vector3(-0.5f  * size.x,   0.5f    * size.y,   -0.5f   * size.z);
+        Vector3 topForwardRight     =   center - new Vector3(0.5f   * size.x,   0.5f    * size.y,   0.5f    * size.z);
+        Vector3 topForwardLeft      =   center - new Vector3(-0.5f  * size.x,   0.5f    * size.y,   0.5f    * size.z);
+
+        Debug.DrawLine(bottomBackLeft,      bottomBackRight,    color, duration, depthTest);
+        Debug.DrawLine(bottomBackRight,     bottomForwardRight, color, duration, depthTest);
+        Debug.DrawLine(bottomForwardRight,  bottomForwardLeft,  color, duration, depthTest);
+        Debug.DrawLine(bottomForwardLeft,   bottomBackLeft,     color, duration, depthTest);
+
+        Debug.DrawLine(bottomBackLeft,      topBackLeft,        color, duration, depthTest);
+        Debug.DrawLine(bottomBackRight,     topBackRight,       color, duration, depthTest);
+        Debug.DrawLine(bottomForwardRight,  topForwardRight,    color, duration, depthTest);
+        Debug.DrawLine(bottomForwardLeft,   topForwardLeft,     color, duration, depthTest);
+
+        Debug.DrawLine(topBackLeft,         topBackRight,       color, duration, depthTest);
+        Debug.DrawLine(topBackRight,        topForwardRight,    color, duration, depthTest);
+        Debug.DrawLine(topForwardRight,     topForwardLeft,     color, duration, depthTest);
+        Debug.DrawLine(topForwardLeft,      topBackLeft,        color, duration, depthTest);
+    }
     public static float ClampEulerAngle(float angle, float min, float max)
     {
         angle = angle % 360;

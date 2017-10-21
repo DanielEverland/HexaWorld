@@ -43,13 +43,24 @@ public class Chunk {
     private int _lastDrawFrame;
 
     private const bool DEBUG_DRAW_NEIGHBORS = true;
+    private const bool DEBUG_DRAW_OUTLINE = true;
 
     public void DebugChunk()
     {
         if(DEBUG_DRAW_NEIGHBORS)
             DrawNeighbors();
+
+        if (DEBUG_DRAW_OUTLINE)
+            DrawOutline();
     }
-    public void DrawNeighbors()
+    private void DrawOutline()
+    {
+        Utility.DrawCube(
+            Utility.GetChunkWorldPosition(_chunkPosition) + HexalSize * ((float)CHUNK_SIZE / 2),
+            HexalSize * CHUNK_SIZE,
+            Color.blue);
+    }
+    private void DrawNeighbors()
     {
         if(Time.frameCount - _lastDrawFrame != 0)
         {
